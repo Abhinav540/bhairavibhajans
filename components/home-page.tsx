@@ -92,18 +92,17 @@ function ContentCards() {
         <GoldRule />
         <div className="program-info">
           <div className="program-image">
-            <Image src={templeImage} alt="Devi Temple Utsavam" fill sizes="250px" />
+            <Image src={templeImage} alt="Ochira Kaalakett" fill sizes="250px" />
           </div>
           <time>
-            <small>JUN</small>
-            <strong>22</strong>
+            <small>SEP</small>
+            <strong>21</strong>
           </time>
           <div>
-            <h3>Devi Temple Utsavam</h3>
+            <h3>Ochira Kaalakett</h3>
             <p>
-              <MapPin size={13} /> Kollam, Kerala
+              <MapPin size={13} /> Ochira, Kollam
             </p>
-            <p>◷ &nbsp;7:00 PM Onwards</p>
             <Button>View Details</Button>
           </div>
         </div>
