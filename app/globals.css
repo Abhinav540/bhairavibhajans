@@ -256,6 +256,15 @@ button {
   overflow: hidden;
 }
 
+.panel.about-stat {
+  height: 120px;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .panel h2 {
   margin: 0;
   color: #d7a64d;

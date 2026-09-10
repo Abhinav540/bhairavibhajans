@@ -113,19 +113,19 @@ export default function AboutPage() {
 
         {/* Key Highlights Grid */}
         <section className="content-grid" style={{ marginTop: "30px", marginBottom: "30px" }}>
-          <article className="panel" style={{ textAlign: "center", padding: "20px 14px" }}>
+          <article className="panel about-stat" style={{ textAlign: "center", padding: "20px 14px" }}>
             <h3 style={{ color: "var(--gold)", fontSize: "32px", margin: "0 0 2px", fontFamily: "'Cormorant Garamond', serif" }}>
               2023
             </h3>
             <p style={{ color: "#c9bfb1", fontSize: "12.5px", margin: 0 }}>Year Founded</p>
           </article>
-          <article className="panel" style={{ textAlign: "center", padding: "20px 14px" }}>
+          <article className="panel about-stat" style={{ textAlign: "center", padding: "20px 14px" }}>
             <h3 style={{ color: "var(--gold)", fontSize: "32px", margin: "0 0 2px", fontFamily: "'Cormorant Garamond', serif" }}>
               15+
             </h3>
             <p style={{ color: "#c9bfb1", fontSize: "12.5px", margin: 0 }}>Ensemble Artists</p>
           </article>
-          <article className="panel" style={{ textAlign: "center", padding: "20px 14px" }}>
+          <article className="panel about-stat" style={{ textAlign: "center", padding: "20px 14px" }}>
             <h3 style={{ color: "var(--gold)", fontSize: "32px", margin: "0 0 2px", fontFamily: "'Cormorant Garamond', serif" }}>
               50+
             </h3>
