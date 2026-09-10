@@ -19,7 +19,7 @@ export function Navbar({ active }: { active?: string }) {
   return (
     <header className="navbar">
       <Link className="brand" href="/" aria-label="Bhairavi Bhajans home">
-        <Image src="/images/bhairavi-logo.png" alt="Bhairavi Bhajans" width={128} height={62} priority />
+        <Image src="/images/bhairavi-logo.webp" alt="Bhairavi Bhajans" width={128} height={62} priority />
       </Link>
       <nav className="desktop-nav" aria-label="Primary navigation">
         {navLinks.map((link) => {

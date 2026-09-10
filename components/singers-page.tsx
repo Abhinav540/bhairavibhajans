@@ -177,7 +177,7 @@ export default function SingersPage() {
           <header className="singers-header">
             <div className="singers-logo-wrap">
               <Image
-                src="/images/bhairavi-logo.png"
+                src="/images/bhairavi-logo.webp"
                 alt="Bhairavi Bhajans Emblem"
                 width={180}
                 height={85}
@@ -203,7 +203,7 @@ export default function SingersPage() {
           <section className="singers-section">
             <div className="singers-logo-divider">
               <Image
-                src="/images/bhairavi-logo.png"
+                src="/images/bhairavi-logo.webp"
                 alt="Bhairavi Logo"
                 width={120}
                 height={55}
@@ -221,7 +221,7 @@ export default function SingersPage() {
           <section className="singers-section">
             <div className="singers-logo-divider">
               <Image
-                src="/images/bhairavi-logo.png"
+                src="/images/bhairavi-logo.webp"
                 alt="Bhairavi Logo"
                 width={120}
                 height={55}

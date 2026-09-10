@@ -11,7 +11,7 @@ export function Footer() {
     <footer id="contact">
       <div className="footer-grid">
         <div>
-          <Image src="/images/bhairavi-logo.png" alt="Bhairavi Bhajans" width={100} height={48} />
+          <Image src="/images/bhairavi-logo.webp" alt="Bhairavi Bhajans" width={100} height={48} />
           <p>
             Spreading devotion,<br />
             one bhajan at a time.
