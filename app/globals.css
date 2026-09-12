@@ -3034,6 +3034,29 @@ time strong {
   font-family: inherit;
 }
 
+.admin-field .admin-pswd-toggle {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  padding: 4px;
+  margin-left: -6px;
+  color: #7d7264;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.admin-field .admin-pswd-toggle:hover {
+  color: #c9a34f;
+}
+
+.admin-field .admin-pswd-toggle:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
 .admin-primary-btn {
   display: inline-flex;
   align-items: center;

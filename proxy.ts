@@ -10,6 +10,7 @@ export async function proxy(request: NextRequest) {
   // No Supabase configured yet — let the site run without auth so public
   // pages and the login screen still work until env vars are provided.
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    console.warn("[proxy] NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY missing; admin auth disabled");
     return NextResponse.next({ request });
   }
 
@@ -39,9 +40,15 @@ export async function proxy(request: NextRequest) {
     }
   );
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  let user: Awaited<ReturnType<typeof supabase.auth.getUser>>["data"]["user"] = null;
+  try {
+    const {
+      data: { user: resolvedUser },
+    } = await supabase.auth.getUser();
+    user = resolvedUser;
+  } catch (err) {
+    console.warn("[proxy] auth getUser failed:", err instanceof Error ? err.message : err);
+  }
 
   const { pathname } = request.nextUrl;
   const isLoginPage = pathname === ADMIN_LOGIN;
