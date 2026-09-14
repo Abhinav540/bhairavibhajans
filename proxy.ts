@@ -76,6 +76,36 @@ export async function proxy(request: NextRequest) {
   return supabaseResponse;
 }
 
+// Proxy runs on every matched request, including Next.js's own background
+// route prefetches (see: node_modules/next/dist/docs/.../guides/authentication.md
+// "Optimistic checks with Proxy" — prefetches fire in parallel with real
+// navigations). Each run here calls Supabase's `getUser()`, a real network
+// round-trip that can rotate the session's refresh token; concurrent calls
+// from a real navigation plus its prefetches can race that rotation and
+// flip the auth result request-to-request, which showed up as a redirect
+// loop between /admin/login and /admin. `missing` excludes prefetch-only
+// requests from ever reaching this file, so only real navigations run the
+// check — the dashboard layout's own `requireAdminUser()` still verifies
+// the session independently, so this doesn't weaken protection.
+//
+// This has to be written as a plain inline literal (no shared constant/
+// spread) because Next.js statically parses the `matcher` export at build
+// time rather than executing it.
 export const config = {
-  matcher: ["/admin/:path*", "/admin"],
+  matcher: [
+    {
+      source: "/admin/:path*",
+      missing: [
+        { type: "header", key: "next-router-prefetch" },
+        { type: "header", key: "purpose", value: "prefetch" },
+      ],
+    },
+    {
+      source: "/admin",
+      missing: [
+        { type: "header", key: "next-router-prefetch" },
+        { type: "header", key: "purpose", value: "prefetch" },
+      ],
+    },
+  ],
 };
