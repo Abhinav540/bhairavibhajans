@@ -2,6 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import type { CookieMethodsServer } from "@supabase/ssr";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import type { User } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database";
 
 const ADMIN_LOGIN = "/admin/login";
@@ -32,22 +33,25 @@ export async function proxy(request: NextRequest) {
     },
   };
 
-  const supabase = createServerClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: cookiesMethods,
-    }
-  );
-
-  let user: Awaited<ReturnType<typeof supabase.auth.getUser>>["data"]["user"] = null;
+  // Client construction can throw synchronously (e.g. a malformed
+  // NEXT_PUBLIC_SUPABASE_URL value) — same as `getUser()` failing, treat
+  // that as "not authenticated" instead of crashing the whole middleware
+  // invocation, which would otherwise take down every /admin/* request.
+  let user: User | null = null;
   try {
+    const supabase = createServerClient<Database>(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: cookiesMethods,
+      }
+    );
     const {
       data: { user: resolvedUser },
     } = await supabase.auth.getUser();
     user = resolvedUser;
   } catch (err) {
-    console.warn("[proxy] auth getUser failed:", err instanceof Error ? err.message : err);
+    console.warn("[proxy] Supabase client init or getUser failed:", err instanceof Error ? err.message : err);
   }
 
   const { pathname } = request.nextUrl;
