@@ -57,13 +57,17 @@ export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const isLoginPage = pathname === ADMIN_LOGIN;
 
-  // Logged-in users visiting /admin/login are sent to the dashboard.
-  if (isLoginPage && user) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/admin";
-    url.search = "";
-    return NextResponse.redirect(url);
-  }
+  // Note: we intentionally do NOT redirect an already-logged-in session away
+  // from /admin/login here. requireAdminUser() (lib/auth.ts) is the real
+  // authorization check — a valid Supabase session alone isn't enough, the
+  // user's email must also be in `admin_users` (or match ADMIN_ALLOWED_EMAIL).
+  // If proxy bounces any *authenticated* session straight to /admin while
+  // requireAdminUser() rejects that same session back to /admin/login, the
+  // two disagree forever: /admin (200, soft-redirected back to login) <->
+  // /admin/login (307, bounced back to /admin). Leaving this page reachable
+  // for an authenticated-but-unauthorized session breaks that loop; it does
+  // not weaken security since unauthenticated sessions are still redirected
+  // below, and requireAdminUser() still gates the actual dashboard content.
 
   // Not logged in → send to login page.
   if (!isLoginPage && !user) {
