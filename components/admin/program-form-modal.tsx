@@ -152,7 +152,7 @@ export function ProgramFormModal({ open, editing, defaultDate, onClose, onSaved 
               <input type="date" value={form.date} onChange={(e) => setField("date", e.target.value)} />
             </label>
             <label className="admin-form-field">
-              <span>Program Type</span>
+              <span>Program Type <em className="optional-hint">(optional)</em></span>
               <select value={form.program_type} onChange={(e) => setField("program_type", e.target.value)}>
                 {PROGRAM_TYPES.map((t) => (
                   <option key={t.value} value={t.value}>{t.label}</option>
