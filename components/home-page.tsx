@@ -3,10 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { CalendarDays, ChevronRight, MapPin, Play } from "lucide-react";
+import { CalendarDays, ChevronRight, Clock, MapPin, Play } from "lucide-react";
 import { Navbar } from "./navbar";
 import { Footer } from "./footer";
 import { WHATSAPP_BOOKING_URL } from "@/data/home";
+import { formatTime, formatTimeRange } from "@/lib/format";
 import type { Program } from "@/lib/types";
 
 const heroImage = "/images/three-girls.jpg";
@@ -108,6 +109,14 @@ function ContentCards({ upcomingProgram }: { upcomingProgram: Program | null }) 
                 "See the live calendar for programs and open dates."
               )}
             </p>
+            {upcomingProgram?.start_time && (
+              <p>
+                <Clock size={13} />{" "}
+                {upcomingProgram.end_time
+                  ? formatTimeRange(upcomingProgram.start_time, upcomingProgram.end_time)
+                  : `${formatTime(upcomingProgram.start_time)} Onwards`}
+              </p>
+            )}
             <Link className="button" href={upcomingProgram ? `/programs/${upcomingProgram.id}` : "/programs"}>
               {upcomingProgram ? "View Details" : "View Calendar"}
             </Link>
