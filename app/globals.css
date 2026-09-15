@@ -263,7 +263,7 @@ button {
   border-radius: 10px;
   background: linear-gradient(120deg, #17130f, #0e0c0a);
   padding: 14px 18px;
-  height: 220px;
+  min-height: 220px;
   overflow: hidden;
 }
 
@@ -287,8 +287,14 @@ button {
   width: 120px;
 }
 
+.panel.about {
+  display: flex;
+  flex-direction: column;
+}
+
 .about-content {
   display: flex;
+  flex: 1;
   gap: 12px;
   align-items: center;
 }
@@ -343,7 +349,7 @@ button {
 }
 
 .program-image {
-  height: 132px;
+  height: 160px;
   position: relative;
   border-radius: 6px;
   overflow: hidden;
