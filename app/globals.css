@@ -255,10 +255,6 @@ button {
   padding: 0 55px 30px;
   display: grid;
   grid-template-columns: 1fr 1.2fr 1fr;
-  /* Each card hugs its own content height instead of stretching to
-     match whichever sibling is tallest - avoids empty space at the
-     bottom of the shorter cards. */
-  align-items: start;
   gap: 20px;
 }
 
@@ -267,6 +263,7 @@ button {
   border-radius: 10px;
   background: linear-gradient(120deg, #17130f, #0e0c0a);
   padding: 14px 18px;
+  height: 220px;
   overflow: hidden;
 }
 
@@ -346,7 +343,7 @@ button {
 }
 
 .program-image {
-  height: 160px;
+  height: 132px;
   position: relative;
   border-radius: 6px;
   overflow: hidden;
