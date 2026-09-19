@@ -4005,7 +4005,8 @@ time strong {
   }
 }
 
-@media (max-width: 1000px) {
+/* 1024px keeps iPad Pro portrait on the drawer layout too. */
+@media (max-width: 1024px) {
   .admin-main {
     margin-left: 0;
     padding-top: 0;
@@ -4146,5 +4147,285 @@ time strong {
   .range-picker {
     width: 100%;
     overflow-x: auto;
+  }
+}
+
+/* ===========================================================================
+   ADMIN — TABLET & PHONE
+   The panel is laid out for a desktop grid; these blocks reflow it for
+   iPad (drawer nav, two-column stats) and phones (single column, tables
+   restacked as cards). Ordered last so they win over the base rules.
+   =========================================================================== */
+
+/* --- iPad and small laptops ------------------------------------------- */
+@media (max-width: 1024px) {
+  /* The shell is a flex row for the desktop sidebar. Below this width the
+     sidebar goes off-canvas and the sticky mobile bar becomes an ordinary
+     child, so as a row it was being laid out *beside* the content and
+     squeezing it off screen. Stack them instead. */
+  .admin-shell {
+    display: block;
+    overflow-x: hidden;
+  }
+
+  .admin-sidebar {
+    width: min(300px, 82vw);
+  }
+
+  .admin-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .crm-layout,
+  .admin-calendar-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .crm-detail,
+  .admin-day-panel {
+    position: static;
+  }
+}
+
+/* --- Large phones and iPad portrait split view ------------------------- */
+@media (max-width: 760px) {
+  .admin-content {
+    padding: 18px 14px 44px;
+  }
+
+  .admin-page-head h1 {
+    font-size: 25px;
+  }
+
+  /* Page actions ("Add Program", export…) get a full-width tap target
+     instead of being squeezed beside the heading. */
+  .admin-page-head-row {
+    align-items: stretch;
+  }
+
+  .admin-page-head-row > .admin-accent-btn,
+  .admin-page-head-row > .admin-ghost-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .admin-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .admin-search,
+  .admin-toolbar .admin-select {
+    width: 100%;
+    min-width: 0;
+  }
+
+  /* Squashing a 640-unit viewBox into a phone width distorts the axis
+     labels, so let the chart keep its proportions and scroll instead. */
+  .line-chart-wrap,
+  .bar-chart-wrap {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .line-chart-wrap svg,
+  .bar-chart-wrap svg {
+    min-width: 520px;
+  }
+
+  .range-picker {
+    width: 100%;
+    overflow-x: auto;
+    justify-content: flex-start;
+  }
+
+  .crm-detail-row {
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .crm-detail-row span:last-child {
+    text-align: left;
+  }
+}
+
+/* --- Tables become cards ----------------------------------------------
+   Below this width six columns cannot fit without either a sideways
+   scroll or unreadable text, so each row is redrawn as a stacked card
+   with the column name coming from the cell's data-label.
+   ---------------------------------------------------------------------- */
+@media (max-width: 700px) {
+  .admin-table-wrap {
+    overflow-x: visible;
+    padding: 0;
+  }
+
+  .admin-table,
+  .admin-table tbody,
+  .admin-table tr,
+  .admin-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .admin-table thead {
+    /* Headings move into each cell via data-label. */
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .admin-table tbody tr {
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.02);
+    padding: 14px 15px;
+    margin-bottom: 12px;
+  }
+
+  .admin-table tbody tr:last-child {
+    margin-bottom: 0;
+  }
+
+  .admin-table td {
+    border-bottom: 0;
+    padding: 5px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    text-align: right;
+  }
+
+  .admin-table td::before {
+    content: attr(data-label);
+    flex: 0 0 auto;
+    font-size: 11px;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
+    color: #8d7f6d;
+    font-weight: 600;
+    text-align: left;
+  }
+
+  /* The first cell is the card's heading, and the actions row its footer —
+     neither wants a label or the right-aligned two-column treatment. */
+  .admin-table td[data-cell="title"] {
+    display: block;
+    text-align: left;
+    padding: 0 0 9px;
+    margin-bottom: 7px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  }
+
+  .admin-table td[data-cell="actions"] {
+    justify-content: flex-end;
+    padding-top: 11px;
+  }
+
+  .admin-table td[data-cell="title"]::before,
+  .admin-table td[data-cell="actions"]::before {
+    content: none;
+  }
+
+  .admin-table .admin-empty-cell {
+    display: block;
+    text-align: center;
+    padding: 30px 14px !important;
+  }
+
+  .admin-table tbody tr:has(.admin-empty-cell) {
+    border: 0;
+    background: transparent;
+    padding: 0;
+  }
+
+  .admin-row-actions .admin-icon-btn {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+/* --- Phones ------------------------------------------------------------ */
+@media (max-width: 560px) {
+  .admin-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-chart-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-form-field.span-2 {
+    grid-column: auto;
+  }
+
+  /* Hour / minute / AM-PM stay on one line; only the meridiem needs room. */
+  .admin-time-field select {
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+
+  .modal-backdrop {
+    padding: 12px;
+    align-items: flex-start;
+  }
+
+  .admin-form-modal,
+  .modal-content {
+    max-height: calc(100dvh - 24px);
+    padding: 18px;
+  }
+
+  .admin-form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .admin-form-actions button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .crm-stage-tab,
+  .range-picker button {
+    font-size: 12px;
+    padding: 8px 11px;
+  }
+
+  /* Name on its own line, then the status chip and date beneath it —
+     all three side by side leaves nothing readable at phone width. */
+  .crm-enquiry-row {
+    flex-wrap: wrap;
+    gap: 8px 10px;
+  }
+
+  .crm-enquiry-main {
+    flex: 1 1 100%;
+  }
+
+  .crm-enquiry-date {
+    margin-left: auto;
+  }
+
+  .crm-detail-actions button,
+  .crm-detail-actions a {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+
+  .admin-cal-day {
+    min-height: 40px;
+  }
+
+  .admin-panel-head {
+    flex-wrap: wrap;
   }
 }

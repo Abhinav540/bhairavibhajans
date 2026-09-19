@@ -158,14 +158,14 @@ export function ProgramsManager({ initialPrograms }: ProgramsManagerProps) {
           <tbody>
             {filtered.map((p) => (
               <tr key={p.id}>
-                <td>
+                <td data-cell="title">
                   <div className="admin-table-title">{p.title}</div>
                   <div className="admin-table-sub">{p.program_type?.replaceAll("_", " ") ?? "—"}</div>
                 </td>
-                <td>{formatDate(p.date)}</td>
-                <td>{formatTimeRange(p.start_time, p.end_time) || "—"}</td>
-                <td>{p.location ?? "—"}</td>
-                <td>
+                <td data-label="Date">{formatDate(p.date)}</td>
+                <td data-label="Time">{formatTimeRange(p.start_time, p.end_time) || "—"}</td>
+                <td data-label="Location">{p.location ?? "—"}</td>
+                <td data-label="Status">
                   <div className="status-picker">
                     <span className={`status-chip status-${p.status}`}>{p.status}</span>
                     <select
@@ -180,7 +180,7 @@ export function ProgramsManager({ initialPrograms }: ProgramsManagerProps) {
                     </select>
                   </div>
                 </td>
-                <td>
+                <td data-cell="actions">
                   <div className="admin-row-actions">
                     <button className="admin-icon-btn" onClick={() => setFormModal({ open: true, editing: p })} aria-label={`Edit ${p.title}`} title="Edit">
                       <Pencil size={15} />

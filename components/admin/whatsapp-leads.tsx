@@ -93,15 +93,15 @@ export function WhatsAppLeadsView({ initial }: WhatsAppLeadsViewProps) {
           <tbody>
             {data.leads.map((lead) => (
               <tr key={lead.id}>
-                <td>
+                <td data-cell="title">
                   <div className="admin-table-title">{lead.page ?? "—"}</div>
                   <div className="admin-table-sub">{lead.page === "navbar" ? "Navbar button" : "Site page"}</div>
                 </td>
-                <td>{lead.program_title ?? (lead.program_id ? "Program" : "—")}</td>
-                <td className="admin-table-title" style={{ textTransform: "none" }}>
+                <td data-label="Program">{lead.program_title ?? (lead.program_id ? "Program" : "—")}</td>
+                <td data-label="Visitor" className="admin-table-title" style={{ textTransform: "none" }}>
                   {lead.visitor_id ? lead.visitor_id.slice(0, 8) + "…" : "—"}
                 </td>
-                <td>{formatDate(lead.created_at.slice(0, 10))}</td>
+                <td data-label="Date">{formatDate(lead.created_at.slice(0, 10))}</td>
               </tr>
             ))}
             {data.leads.length === 0 && (
