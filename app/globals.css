@@ -3311,6 +3311,34 @@ time strong {
   color: #efe7d9;
 }
 
+.admin-time-field {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.admin-time-field select {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  padding-left: 6px;
+  padding-right: 6px;
+}
+
+.admin-time-field select:last-child {
+  flex: 1.2;
+}
+
+.admin-time-field select:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.admin-time-colon {
+  color: #8a7d66;
+  font-weight: 600;
+}
+
 .admin-form-actions {
   display: flex;
   justify-content: flex-end;

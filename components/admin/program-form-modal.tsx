@@ -6,6 +6,7 @@ import { Loader2 } from "lucide-react";
 import type { Program, ProgramStatus } from "@/lib/types";
 import { Toast, type ToastState } from "@/components/admin/toast";
 import { ImageUploader } from "@/components/admin/image-uploader";
+import { TimeField } from "@/components/admin/time-field";
 
 const PROGRAM_TYPES = [
   { value: "", label: "— Select type —" },
@@ -26,7 +27,6 @@ interface FormState {
   program_type: string;
   date: string;
   start_time: string;
-  end_time: string;
   location: string;
   status: ProgramStatus;
   image: string;
@@ -38,7 +38,6 @@ const EMPTY_FORM: FormState = {
   program_type: "",
   date: "",
   start_time: "",
-  end_time: "",
   location: "",
   status: "booked",
   image: "",
@@ -72,7 +71,6 @@ export function ProgramFormModal({ open, editing, defaultDate, onClose, onSaved 
           program_type: editing.program_type ?? "",
           date: editing.date,
           start_time: editing.start_time ?? "",
-          end_time: editing.end_time ?? "",
           location: editing.location ?? "",
           status: editing.status,
           image: editing.image ?? "",
@@ -107,7 +105,8 @@ export function ProgramFormModal({ open, editing, defaultDate, onClose, onSaved 
         program_type: form.program_type || null,
         date: form.date,
         start_time: form.start_time || null,
-        end_time: form.end_time || null,
+        // The band only publishes a start time; the column stays nullable.
+        end_time: null,
         location: form.location || null,
         status: form.status,
         image: form.image || null,
@@ -159,14 +158,10 @@ export function ProgramFormModal({ open, editing, defaultDate, onClose, onSaved 
                 ))}
               </select>
             </label>
-            <label className="admin-form-field">
+            <div className="admin-form-field">
               <span>Start Time</span>
-              <input type="time" value={form.start_time} onChange={(e) => setField("start_time", e.target.value)} />
-            </label>
-            <label className="admin-form-field">
-              <span>End Time <em className="optional-hint">(optional)</em></span>
-              <input type="time" value={form.end_time} onChange={(e) => setField("end_time", e.target.value)} />
-            </label>
+              <TimeField label="Start time" value={form.start_time} onChange={(v) => setField("start_time", v)} />
+            </div>
             <label className="admin-form-field">
               <span>Location</span>
               <input value={form.location} onChange={(e) => setField("location", e.target.value)} placeholder="e.g. Kochi" />
