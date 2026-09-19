@@ -58,8 +58,20 @@ export function formatTimeRange(start: string | null, end: string | null): strin
   return s || e || "—";
 }
 
+/**
+ * The band and its audience are in India, so "today" must roll over at
+ * midnight IST no matter what timezone the server runs in (hosts default
+ * to UTC, which would keep yesterday's program on screen until 5:30 am).
+ */
+export const SITE_TIME_ZONE = "Asia/Kolkata";
+
 export function todayISO(): string {
-  return toISODate(new Date());
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: SITE_TIME_ZONE,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
 }
 
 export function isISODate(value: string): boolean {

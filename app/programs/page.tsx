@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { getPublicPrograms } from "@/lib/programs";
+import { todayISO } from "@/lib/format";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -11,6 +12,11 @@ export const metadata: Metadata = {
 
 export default async function ProgramsPage() {
   const programs = await getPublicPrograms();
+  const today = todayISO();
+  const upcoming = programs
+    .filter((p) => p.status === "booked" || p.status === "confirmed")
+    .filter((p) => p.date >= today)
+    .sort((a, b) => a.date.localeCompare(b.date));
 
   return (
     <>
@@ -29,10 +35,7 @@ export default async function ProgramsPage() {
         <section className="programs-upcoming">
           <h2>Upcoming Programs</h2>
           <div className="programs-upcoming-list">
-            {programs
-              .filter((p) => p.status === "booked" || p.status === "confirmed")
-              .filter((p) => p.date >= new Date().toISOString().slice(0, 10))
-              .sort((a, b) => a.date.localeCompare(b.date))
+            {upcoming
               .slice(0, 6)
               .map((p) => (
                 <article key={p.id} className="program-upcoming-card">
@@ -46,7 +49,7 @@ export default async function ProgramsPage() {
                   </div>
                 </article>
               ))}
-            {programs.filter((p) => p.status !== "cancelled").filter((p) => p.date >= new Date().toISOString().slice(0, 10)).length === 0 && (
+            {upcoming.length === 0 && (
               <p className="empty-state">No upcoming programs right now — book us for your event.</p>
             )}
           </div>
