@@ -1,11 +1,11 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { CalendarDays, Phone } from "lucide-react";
 import { Navbar } from "./navbar";
 import { Footer } from "./footer";
-import { WHATSAPP_BOOKING_URL } from "@/data/home";
 
 function GoldRule() {
   return (
@@ -147,9 +147,9 @@ export default function AboutPage() {
               Invite Bhairavi Bhajans to perform live for temple festivals, cultural programs, or spiritual gatherings across Kerala.
             </p>
             <div className="stage-actions" style={{ justifyContent: "center", marginTop: "20px" }}>
-              <a href={WHATSAPP_BOOKING_URL} target="_blank" rel="noopener noreferrer" className="button">
+              <Link href="/booking" className="button">
                 <CalendarDays size={17} /> Book Live Concert
-              </a>
+              </Link>
               <a href="tel:+918877001139" className="button outline">
                 <Phone size={17} /> Call (+91 88770 01139)
               </a>

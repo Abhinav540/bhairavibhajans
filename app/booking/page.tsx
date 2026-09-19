@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { BookingForm } from "@/components/booking/booking-form";
@@ -61,18 +60,9 @@ export default async function BookingPage({ searchParams }: BookingPageProps) {
               <div className="booking-side-card">
                 <h4>What happens next?</h4>
                 <p>
-                  We review your enquiry, check the calendar for your requested date, and contact
-                  you to confirm the program details.
+                  We instantly check your selected date, then open WhatsApp with your details
+                  pre-filled — just hit send and we&apos;ll confirm your program.
                 </p>
-              </div>
-              <div className="booking-side-card">
-                <h4>Check availability first</h4>
-                <p>
-                  Browse the public calendar to see upcoming programs and open dates.
-                </p>
-                <Link className="button outline" href="/programs">
-                  View Calendar
-                </Link>
               </div>
             </aside>
           </div>

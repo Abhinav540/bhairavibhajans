@@ -1,34 +1,30 @@
+import Link from "next/link";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
-import { ProgramCalendar } from "@/components/programs/program-calendar";
-import { getPublicAvailability, getPublicPrograms } from "@/lib/programs";
+import { getPublicPrograms } from "@/lib/programs";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Programs & Live Dates | Bhairavi Bhajans",
-  description: "Browse the Bhairavi Bhajans gig calendar, check availability and book the band for your event.",
+  description: "Browse the Bhairavi Bhajans upcoming programs and book the band for your event.",
 };
 
 export default async function ProgramsPage() {
-  const [programs, availability] = await Promise.all([
-    getPublicPrograms(),
-    getPublicAvailability(),
-  ]);
+  const programs = await getPublicPrograms();
 
   return (
     <>
       <Navbar active="Programs" />
       <main className="programs-page">
         <section className="programs-hero">
-          <h1>Programs &amp; Availability</h1>
+          <h1>Programs &amp; Live Dates</h1>
           <div className="gold-rule"><span /></div>
           <p>
-            See when Bhairavi Bhajans is performing, and find open dates to
-            invite us to your event.
+            See where Bhairavi Bhajans is performing next, and book us for your own event.
           </p>
-        </section>
-        <section className="programs-calendar-wrap">
-          <ProgramCalendar programs={programs} availability={availability} />
+          <Link className="button" href="/booking">
+            Book a Program
+          </Link>
         </section>
         <section className="programs-upcoming">
           <h2>Upcoming Programs</h2>
@@ -51,7 +47,7 @@ export default async function ProgramsPage() {
                 </article>
               ))}
             {programs.filter((p) => p.status !== "cancelled").filter((p) => p.date >= new Date().toISOString().slice(0, 10)).length === 0 && (
-              <p className="empty-state">No upcoming programs right now — check the calendar for open dates.</p>
+              <p className="empty-state">No upcoming programs right now — book us for your event.</p>
             )}
           </div>
         </section>

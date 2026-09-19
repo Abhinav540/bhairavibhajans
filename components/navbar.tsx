@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { CalendarDays, Menu, X } from "lucide-react";
-import { navLinks, WHATSAPP_BOOKING_URL } from "@/data/home";
+import { navLinks } from "@/data/home";
 
 export function getNavHref(link: string) {
   const normalized = link.trim().toLowerCase();
@@ -34,19 +34,9 @@ export function Navbar({ active }: { active?: string }) {
           );
         })}
       </nav>
-      <a
-        href={WHATSAPP_BOOKING_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="button"
-        onClick={() => {
-          import("@/lib/analytics/track").then((m) =>
-            m.trackWhatsAppClick({ page: "navbar" })
-          );
-        }}
-      >
+      <Link href="/booking" className="button">
         <CalendarDays size={17} /> Book a Program
-      </a>
+      </Link>
       <button className="menu-button" onClick={() => setOpen(!open)} aria-expanded={open} aria-label="Toggle navigation">
         {open ? <X /> : <Menu />}
       </button>

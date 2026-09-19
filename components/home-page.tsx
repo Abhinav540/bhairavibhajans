@@ -6,7 +6,6 @@ import { motion } from "framer-motion";
 import { CalendarDays, ChevronRight, Clock, MapPin, Play } from "lucide-react";
 import { Navbar } from "./navbar";
 import { Footer } from "./footer";
-import { WHATSAPP_BOOKING_URL } from "@/data/home";
 import { formatTime, formatTimeRange } from "@/lib/format";
 import type { Program } from "@/lib/types";
 
@@ -42,9 +41,9 @@ function Hero() {
         <GoldRule />
         <p className="hero-description">Bhairavi Bhajans is a devotional music group dedicated to spreading love, peace and devotion through soulful bhajans.</p>
         <div className="hero-actions">
-          <a href={WHATSAPP_BOOKING_URL} target="_blank" rel="noopener noreferrer" className="button">
+          <Link href="/booking" className="button">
             <CalendarDays size={17} /> Book a Program
-          </a>
+          </Link>
           <a href={instagramReelsUrl} target="_blank" rel="noopener noreferrer" className="button outline">
             <Play size={17} /> Watch Videos
           </a>
@@ -164,9 +163,9 @@ function StageSection() {
           Captivating audiences with soulful devotional music, traditional instruments, and grand stage performances across temples and cultural events.
         </p>
         <div className="stage-actions">
-          <a href={WHATSAPP_BOOKING_URL} target="_blank" rel="noopener noreferrer" className="button">
+          <Link href="/booking" className="button">
             <CalendarDays size={17} /> Book Live Concert
-          </a>
+          </Link>
         </div>
       </div>
     </section>

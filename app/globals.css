@@ -1506,10 +1506,8 @@ time strong {
   line-height: 1.6;
 }
 
-.programs-calendar-wrap {
-  max-width: 980px;
-  margin: 30px auto 55px;
-  padding: 0 24px;
+.programs-hero .button {
+  margin-top: 22px;
 }
 
 .programs-upcoming {

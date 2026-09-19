@@ -1,19 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { CheckCircle2, Send } from "lucide-react";
-import { WHATSAPP_BOOKING_URL } from "@/data/home";
-import { formatDate } from "@/lib/format";
-
-const EVENT_TYPES = [
-  "temple_festival",
-  "wedding",
-  "concert",
-  "religious",
-  "corporate",
-  "private",
-  "other",
-];
+import { Loader2, MessageCircle, Send } from "lucide-react";
+import { WHATSAPP_NUMBER } from "@/data/home";
+import { formatDate, isISODate } from "@/lib/format";
 
 interface BookingFormProps {
   defaultDate?: string;
@@ -24,44 +14,60 @@ interface BookingFormProps {
 export function BookingForm({ defaultDate, defaultProgram, programsSummary }: BookingFormProps) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [eventType, setEventType] = useState("");
-  const [eventDate, setEventDate] = useState(defaultDate ?? "");
   const [location, setLocation] = useState("");
-  const [message, setMessage] = useState("");
+  const [date, setDate] = useState(defaultDate ?? "");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
-  const [done, setDone] = useState(false);
+  const [sentDate, setSentDate] = useState<string | null>(null);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
     if (!name.trim()) return setError("Please enter your name.");
-    if (!phone.trim()) return setError("Please enter your phone number.");
+    if (!phone.trim()) return setError("Please enter your mobile number.");
+    if (!location.trim()) return setError("Please enter the event location.");
+    if (!date || !isISODate(date)) return setError("Please select a date.");
 
     setBusy(true);
     try {
-      const res = await fetch("/api/enquiries", {
+      const res = await fetch(`/api/availability/check?date=${date}`);
+      const check = await res.json();
+      if (!res.ok) {
+        setError(check.error ?? "Could not check availability. Please try again.");
+        return;
+      }
+      if (!check.available) {
+        setError(`${formatDate(date)} is unavailable. Please choose another date.`);
+        return;
+      }
+
+      // Best-effort lead log for the admin CRM — never blocks WhatsApp below.
+      fetch("/api/enquiries", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: name.trim(),
           phone: phone.trim(),
-          email: email.trim() || null,
-          event_type: eventType || null,
-          event_date: eventDate || null,
-          event_location: location.trim() || null,
-          message: message.trim() || null,
+          event_date: date,
+          event_location: location.trim(),
           source: defaultProgram ? `program:${defaultProgram}` : "booking",
         }),
-      });
-      const json = await res.json();
-      if (!res.ok) {
-        setError(json.error ?? "Something went wrong. Please try again.");
-        return;
-      }
-      setDone(true);
+      }).catch(() => {});
+
+      import("@/lib/analytics/track").then((m) =>
+        m.trackWhatsAppClick({ page: "/booking", programId: defaultProgram ?? null })
+      );
+
+      const message = [
+        "Hello Bhairavi Bhajans, I would like to book a program.",
+        `Name: ${name.trim()}`,
+        `Location: ${location.trim()}`,
+        `Date: ${formatDate(date)}`,
+      ].join("\n");
+      const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+      window.open(waUrl, "_blank", "noopener,noreferrer");
+      setSentDate(date);
     } catch {
       setError("Network error. Please try again or reach us on WhatsApp.");
     } finally {
@@ -69,20 +75,21 @@ export function BookingForm({ defaultDate, defaultProgram, programsSummary }: Bo
     }
   };
 
-  if (done) {
+  if (sentDate) {
     return (
       <div className="booking-success">
         <div className="success-icon">
-          <CheckCircle2 size={30} />
+          <MessageCircle size={30} />
         </div>
-        <h2>Enquiry Sent</h2>
+        <h2>Almost there!</h2>
         <p>
-          Thank you {name.split(" ")[0]}! We received your enquiry and will get back to you
-          shortly. For a faster response, send us a message on WhatsApp.
+          We opened WhatsApp with your booking details for{" "}
+          <span className="selected-date">{formatDate(sentDate)}</span>. Just hit send there
+          and we&apos;ll confirm your program shortly.
         </p>
-        <a className="button" href={WHATSAPP_BOOKING_URL} target="_blank" rel="noopener noreferrer">
-          Message us on WhatsApp
-        </a>
+        <button type="button" className="button outline" onClick={() => setSentDate(null)}>
+          Book another date
+        </button>
       </div>
     );
   }
@@ -110,7 +117,7 @@ export function BookingForm({ defaultDate, defaultProgram, programsSummary }: Bo
           />
         </div>
         <div className="form-field">
-          <label htmlFor="bk-phone">Phone / WhatsApp *</label>
+          <label htmlFor="bk-phone">Mobile Number *</label>
           <input
             id="bk-phone"
             type="tel"
@@ -121,39 +128,7 @@ export function BookingForm({ defaultDate, defaultProgram, programsSummary }: Bo
           />
         </div>
         <div className="form-field">
-          <label htmlFor="bk-type">Event Type</label>
-          <select id="bk-type" value={eventType} onChange={(e) => setEventType(e.target.value)}>
-            <option value="">— Select —</option>
-            {EVENT_TYPES.map((t) => (
-              <option key={t} value={t}>
-                {t.replaceAll("_", " ")}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="form-field">
-          <label htmlFor="bk-date">Preferred Date</label>
-          <input
-            id="bk-date"
-            type="date"
-            value={eventDate}
-            min={new Date().toISOString().slice(0, 10)}
-            onChange={(e) => setEventDate(e.target.value)}
-          />
-        </div>
-        <div className="form-field">
-          <label htmlFor="bk-email">Email (optional)</label>
-          <input
-            id="bk-email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@example.com"
-            autoComplete="email"
-          />
-        </div>
-        <div className="form-field">
-          <label htmlFor="bk-loc">Event Location</label>
+          <label htmlFor="bk-loc">Event Location *</label>
           <input
             id="bk-loc"
             value={location}
@@ -161,30 +136,24 @@ export function BookingForm({ defaultDate, defaultProgram, programsSummary }: Bo
             placeholder="e.g. Thrissur"
           />
         </div>
-        <div className="form-field full">
-          <label htmlFor="bk-msg">Message</label>
-          <textarea
-            id="bk-msg"
-            rows={4}
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Tell us about your occasion, expected audience, duration…"
+        <div className="form-field">
+          <label htmlFor="bk-date">Event Date *</label>
+          <input
+            id="bk-date"
+            type="date"
+            value={date}
+            min={new Date().toISOString().slice(0, 10)}
+            onChange={(e) => setDate(e.target.value)}
           />
         </div>
       </div>
 
       <button className="button" type="submit" disabled={busy}>
-        {busy ? "Sending…" : "Send Enquiry"}
+        {busy ? <Loader2 size={16} className="spin" /> : null} {busy ? "Checking…" : "Book Now"}
       </button>
 
       {programsSummary && programsSummary.length > 0 && (
         <p className="form-note">You referenced the program: {programsSummary.join(", ")}.</p>
-      )}
-      {defaultDate && (
-        <p className="form-note">
-          Your selected date is <span className="selected-date">{formatDate(defaultDate)}</span>. If this
-          date is taken, we will suggest the next available one.
-        </p>
       )}
     </form>
   );
