@@ -1,6 +1,6 @@
 import { CalendarDays, Images, Music2, Phone, PlaySquare } from "lucide-react";
 
-export const navLinks = ["Home", "About Us", "Programs", "Contact"];
+export const navLinks = ["Home", "About Us", "Our Team", "Programs", "Contact"];
 
 export const WHATSAPP_BOOKING_URL =
   "https://wa.me/918877001139?text=Hello%20Bhairavi%20Bhajans,%20I%20would%20like%20to%20book%20a%20program.";

@@ -10,6 +10,7 @@ export function getNavHref(link: string) {
   const normalized = link.trim().toLowerCase();
   if (normalized === "home") return "/";
   if (normalized === "about us" || normalized === "about" || normalized === "about-us") return "/about-us";
+  if (normalized === "our team" || normalized === "singers") return "/our-team";
   if (normalized === "programs") return "/programs";
   if (normalized === "contact" || normalized === "book now" || normalized === "booking") return "/booking";
   return `/#${normalized.replaceAll(" ", "-")}`;
