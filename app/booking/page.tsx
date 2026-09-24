@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { BookingForm } from "@/components/booking/booking-form";
-import { WHATSAPP_BOOKING_URL } from "@/data/home";
+import { EnquiryForm } from "@/components/booking/enquiry-form";
 import { getPublicPrograms } from "@/lib/programs";
 import { isISODate } from "@/lib/format";
 
@@ -49,15 +49,6 @@ export default async function BookingPage({ searchParams }: BookingPageProps) {
             </div>
             <aside className="booking-side">
               <div className="booking-side-card">
-                <h4>Prefer WhatsApp?</h4>
-                <p>
-                  Skip the form and message us directly on WhatsApp for the fastest response.
-                </p>
-                <a className="button outline" href={WHATSAPP_BOOKING_URL} target="_blank" rel="noopener noreferrer">
-                  Chat on WhatsApp
-                </a>
-              </div>
-              <div className="booking-side-card">
                 <h4>What happens next?</h4>
                 <p>
                   We instantly check your selected date, then open WhatsApp with your details
@@ -66,6 +57,16 @@ export default async function BookingPage({ searchParams }: BookingPageProps) {
               </div>
             </aside>
           </div>
+
+          {/* Separate from booking: questions go straight to the CRM, no date or WhatsApp step. */}
+          <section className="enquiry-section" id="enquiry">
+            <div className="enquiry-divider">
+              <span>Or send us an enquiry</span>
+            </div>
+            <div className="booking-form-panel enquiry-panel">
+              <EnquiryForm />
+            </div>
+          </section>
         </div>
       </main>
       <Footer />

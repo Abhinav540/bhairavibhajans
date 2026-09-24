@@ -2546,6 +2546,49 @@ time strong {
   margin: 0 auto 18px;
 }
 
+/* General enquiry — sits under the booking form, visually its own step. */
+.enquiry-section {
+  margin-top: 56px;
+  scroll-margin-top: 100px;
+}
+
+.enquiry-divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 22px;
+  color: var(--gold);
+  font: 600 22px/1.2 "Cormorant Garamond", serif;
+  text-align: center;
+}
+
+.enquiry-divider::before,
+.enquiry-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(200, 149, 57, 0.45), transparent);
+}
+
+.enquiry-lead {
+  margin: -8px 0 20px;
+  color: #b9ad9b;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.enquiry-optional {
+  text-transform: none;
+  letter-spacing: 0;
+  color: #8a7d66;
+  font-weight: 400;
+}
+
+.enquiry-panel textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
 .form-alert {
   display: flex;
   align-items: center;
